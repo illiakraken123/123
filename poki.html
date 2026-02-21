@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Poki SDK Rewarded Ad</title>
+    <script src="https://game-cdn.poki.com/poki-sdk.js"></script>
+</head>
+<body>
+
+    <button id="rewardBtn" style="padding: 20px;">Отримати бонус (Реклама)</button>
+
+    <script>
+        const btn = document.getElementById('rewardBtn');
+
+        // 1. Ініціалізація SDK
+        PokiSDK.init().then(() => {
+            console.log("Poki SDK готовий");
+        }).catch(() => {
+            console.log("SDK не завантажився (можливо, AdBlock)");
+        });
+
+        // 2. Функція виклику реклами з винагородою
+        function showRewardedAd() {
+            // Ставимо гру на паузу (вимкнути звук, зупинити таймери)
+            PokiSDK.gameplayStop();
+
+            PokiSDK.rewardedBreak().then((withReward) => {
+                if (withReward) {
+                    // ГРАВЕЦЬ ПОДИВИВСЯ РЕКЛАМУ
+                    alert("Вітаємо! Ви отримали 100 монет!");
+                    giveReward(); 
+                } else {
+                    // ГРАВЕЦЬ ЗАКРИВ РЕКЛАМУ РАНІШЕ
+                    console.log("Винагороду не видано");
+                }
+                
+                // Продовжуємо гру
+                PokiSDK.gameplayStart();
+            });
+        }
+
+        function giveReward() {
+            // Ваша логіка нарахування бонусу
+            console.log("Бонус нараховано!");
+        }
+
+        // Прив'язка до кнопки
+        btn.addEventListener('click', showRewardedAd);
+    </script>
+</body>
+</html>
